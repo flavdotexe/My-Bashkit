@@ -1,0 +1,7 @@
+[Unit]
+Description=Coleta lista de dispositivos conectados ao hotspot para o Prometheus
+
+[Service]
+Type=oneshot
+# Troque wlan0 pela interface real do seu hotspot (ex: wlp3s0)
+ExecStart=/usr/local/bin/hotspot-monitor.sh wlp1s0
