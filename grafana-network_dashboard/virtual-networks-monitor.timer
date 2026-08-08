@@ -1,0 +1,10 @@
+[Unit]
+Description=Executa virtual-networks-monitor.sh a cada 30 segundos
+
+[Timer]
+OnBootSec=25s
+OnUnitActiveSec=30s
+AccuracySec=5s
+
+[Install]
+WantedBy=timers.target
