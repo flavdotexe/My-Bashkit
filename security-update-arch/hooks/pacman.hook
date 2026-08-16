@@ -1,0 +1,27 @@
+# =============================================================================
+# arch-guardian :: hooks/pacman.hook
+#
+# Rede de segurança para quando o pacman é chamado diretamente (fora do
+# guardian.sh), por exemplo "sudo pacman -Syu" no terminal. Ele não gera o
+# relatório completo (isso é feito pelo guardian.sh, que orquestra o
+# antes/depois), mas registra no journal que uma transação aconteceu fora
+# do agente, para o log ficar sempre coerente.
+#
+# Instalação:
+#   sudo cp hooks/pacman.hook /etc/pacman.d/hooks/95-arch-guardian.hook
+#
+# Isso NÃO interfere no snapper. Se você usa snapper-pacman-hooks, ele
+# continua dele.
+# =============================================================================
+
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = arch-guardian: registrando transação pacman fora do menu interativo...
+When = PostTransaction
+Exec = /usr/bin/logger -t arch-guardian "Transação pacman detectada fora do guardian.sh - rode 'guardian.sh' e veja a opção 7 (log) ou rode uma atualização pelo menu para gerar o relatório completo de antes/depois."
