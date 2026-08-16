@@ -16,7 +16,7 @@ comparando o estado do sistema **antes e depois** de cada atualização.
 
 ```
 arch-guardian/
-├── guardian.sh              # ponto de entrada, menu interativo
+├── secuparch.sh              # ponto de entrada, menu interativo
 ├── modules/
 │   ├── packages.sh          # pacman/AUR: updates, tipos de pacotes, kernel
 │   ├── services.sh          # systemctl: serviços ativos/afetados/failed
@@ -35,12 +35,12 @@ arch-guardian/
 ## Instalação
 
 ```bash
-git clone https://github.com/flavdotexe/arch-guardian.git
-cd arch-guardian
-chmod +x guardian.sh
+git clone https://github.com/flavdotexe/security-update-arch.git
+cd security-update-arch
+chmod +x secuparch.sh
 ```
 
-Dependências (a maioria já vem em qualquer instalação padrão de Arch):
+Dependências (a maioria já vem em qualquer instalação padrão de Arch Linux):
 `pacman`, `iproute2` (ss), `systemd` (systemctl/journalctl), `findutils`
 (find), `coreutils` (stat, comm, diff, sort). Opcionalmente `btrfs-progs` e
 `snapper` para o módulo BTRFS, e `yay` ou `paru` para atualizações AUR.
@@ -104,11 +104,11 @@ Depois vem o menu:
 | 9 | Verificar integridade de pacotes/configs |
 | 0 | Sair |
 
-Toda vez que você atualiza pelas opções 1, 2 ou 3, o guardian:
+Toda vez que você atualiza pelas opções 1, 2 ou 3, o secuparch:
 
 1. Tira uma "foto" do sistema **antes** (rede, serviços, pacotes,
    `.pacnew`, BTRFS)
-2. Executa a atualização
+2. O Pacman executa a atualização
 3. Tira outra foto **depois**
 4. Compara as duas e escreve o relatório em texto
 
@@ -117,7 +117,7 @@ Toda vez que você atualiza pelas opções 1, 2 ou 3, o guardian:
 O relatório da última atualização é salvo em:
 
 ```
-/home/fl4v1c0r3/Documents/Logs/update arch/log.txt
+/home/user/Documents/Logs/update arch/log.txt
 ```
 
 (caminho configurável em `config/guardian.conf`, variável `LOG_FILE`). Cada
@@ -142,7 +142,7 @@ O relatório reúne:
 Tudo fica em `config/guardian.conf`:
 
 ```bash
-LOG_BASE_DIR="/home/fl4v1c0r3/Documents/Logs/update arch"
+LOG_BASE_DIR="/home/user/Documents/Logs/update arch"
 STATE_DIR="${HOME}/.local/state/arch-guardian"
 CRITICAL_PACKAGES=(linux systemd glibc openssl openssh sudo bash pacman ...)
 AUR_HELPER="auto"      # auto | yay | paru | none
@@ -152,7 +152,7 @@ BTRFS_ENABLED="auto"   # auto | true | false
 SNAPPER_CONFIG="root"
 ```
 
-## Licença
+## Licença de uso livre
 
 Uso pessoal, sem garantias. Ajuste os caminhos em `guardian.conf` antes de
 usar em outra máquina.
