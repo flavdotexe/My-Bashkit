@@ -1,0 +1,5 @@
+table inet fw_manager {
+    chain input {
+        type filter hook input priority 10; policy accept;
+    }
+}
