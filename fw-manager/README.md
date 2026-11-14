@@ -1,26 +1,14 @@
-# FW-MANAGER v0.1
+# FW Manager v0.2
 
-Interactive Bash CLI for managing a dedicated nftables input table.
+Edits `/etc/nftables.conf` directly. No parallel managed ruleset. Requires Bash, Python 3, nftables, root and a terminal.
 
-## Requirements
-- Linux, Bash 4+, nftables, Python 3 (IP address validation), sudo
-- Terminal with ANSI escape support
-
-## Start
 ```bash
-chmod +x fw-manager.sh
-./fw-manager.sh
+sudo pacman -S nftables python
+sudo ./fw-manager.sh
 ```
 
-Controls: up/down navigate, right/Enter select, left returns (at root it does nothing), Esc quits at the menu. While entering text, Enter submits the prompt.
+Use arrows UP/DOWN, RIGHT or Enter to select, LEFT to return to main menu, Esc to quit. File edits are validated with `nft -c -f` before writing, and backed up to `/var/backups/fw-manager`. You can apply immediately after an edit or later from the Apply menu. List shows the real file; Status shows the live kernel ruleset.
 
-## Safety
-- Candidate rules are stored in `rules/firewall.nft`; changes are not active until Apply.
-- `nft -c -f` checks syntax, not whether remote access will remain available.
-- The default policy is ACCEPT. Other firewall tables and Docker/Tailscale rules remain untouched, but newly added DROP/REJECT rules can still disrupt connectivity.
-- The manager replaces only its own `inet fw_manager` table on Apply; it does not flush the global ruleset.
-- Before applying, an existing manager table is saved to `backups/preapply-*.nft` if it exists. Backups are not automatically restored.
-- The backup menu copies the candidate ruleset, not the full live firewall.
-- No automatic rollback or persistent boot-time restore is implemented.
-- Input rules only; output and forwarding are out of scope.
-- For local lab testing, start with a VM or a console session rather than SSH.
+**Limitations:** The simple rule editor requires a unique chain name and a chain declaration formatted as `chain NAME {` on its own line. If multiple tables have chains named `input`, it refuses to modify them. Removal supports simple rule lines only, not blocks or policy declarations. It does not understand nftables `include` trees or edit included files. `nft -c` checks syntax, not connectivity or operational safety. Applying a file containing `flush ruleset` may reset Docker/libvirt/Tailscale dynamic rules; keep a local console available. It does not automatically roll back live rules on lost connectivity. Changes made directly to the file are not automatically applied until confirmed. Do not rely on this prototype as a production firewall manager.
+
+To test on a copy, run `sudo FW_CONF=/path/to/test.conf ./fw-manager.sh`. This still permits applying that copy to the live firewall, so **do not select Apply** when testing.
