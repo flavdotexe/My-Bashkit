@@ -1,0 +1,6 @@
+[Unit]
+Description=Coleta metricas de seguranca SSH para o Prometheus
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/ssh-monitor.sh

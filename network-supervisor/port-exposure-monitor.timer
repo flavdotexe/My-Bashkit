@@ -1,0 +1,10 @@
+[Unit]
+Description=Network Supervisor - collect Local TCP UDP listening sockets
+
+[Timer]
+OnBootSec=45s
+OnUnitActiveSec=60s
+AccuracySec=5s
+
+[Install]
+WantedBy=timers.target

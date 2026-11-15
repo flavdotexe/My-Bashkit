@@ -1,0 +1,6 @@
+[Unit]
+Description=Coleta dispositivos conectados as redes virtuais (bridge/libvirt/docker) para o Prometheus
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/virtual-networks-monitor.sh

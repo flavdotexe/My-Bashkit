@@ -1,0 +1,6 @@
+[Unit]
+Description=Network Supervisor - DNS security configuration
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/dns-security-monitor.sh

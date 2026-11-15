@@ -1,0 +1,6 @@
+[Unit]
+Description=Network Supervisor - Local TCP UDP listening sockets
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/port-exposure-monitor.sh
