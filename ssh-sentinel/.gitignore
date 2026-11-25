@@ -1,0 +1,10 @@
+/upstream/
+*.log
+*.jsonl
+cowrie.json*
+*.pem
+*.key
+*.bak
+.env
+/var/
+/data/

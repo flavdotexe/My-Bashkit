@@ -1,0 +1,12 @@
+table inet honeypot {
+    chain input {
+        type filter hook input priority -10; policy accept;
+        iifname "br-honeypot" ct state established,related accept
+        iifname "br-honeypot" counter drop
+    }
+    chain forward {
+        type filter hook forward priority -10; policy accept;
+        iifname "br-honeypot" ct state established,related accept
+        iifname "br-honeypot" counter drop
+    }
+}
