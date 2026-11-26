@@ -1,42 +1,62 @@
-# Adapted from Cowrie's BSD-3-Clause Compose configuration.
-name: ssh-sentinel
+# SPDX-FileCopyrightText: 2021 Michel Oosterhof <michel@oosterhof.net>
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+
 services:
   cowrie:
     container_name: cowrie
-    image: cowrie-local:latest
+    restart: unless-stopped
+
     build:
-      context: ./upstream
-      dockerfile: Dockerfile.sentinel
-    restart: "no"
+      context: ..
+      dockerfile: docker/Dockerfile
+
+    image: cowrie-local:latest
+
     ports:
-      - "127.0.0.1:22:2222/tcp"
+      - "0.0.0.0:22:2222/tcp"
+
     environment:
       COWRIE_TELNET_ENABLED: "false"
+
     volumes:
-      - cowrie-etc:/cowrie/cowrie-git/etc
-      - cowrie-var:/cowrie/cowrie-git/var
-      - ./config/cowrie.cfg:/cowrie/cowrie-git/etc/cowrie.cfg:ro
+      - cowrie-etc:/cowrie/cowrie-git/etc:ro
+      - cowrie-var:/cowrie/cowrie-git/var:rw
+
     user: "999:999"
-    cap_drop: [ALL]
+
+    cap_drop:
+      - ALL
+
     read_only: true
-    security_opt: [no-new-privileges:true]
+
+    security_opt:
+      - no-new-privileges:true
+
     tmpfs:
       - /tmp:rw,noexec,nosuid,nodev,size=64m
+
     mem_limit: 512m
     cpus: 1.0
     pids_limit: 128
-    networks: [honeypot]
+
+    networks:
+      - honeypot
+
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "5"
+
 networks:
   honeypot:
     name: honeypot-net
     driver: bridge
     driver_opts:
       com.docker.network.bridge.name: br-honeypot
+
 volumes:
   cowrie-etc:
   cowrie-var:
