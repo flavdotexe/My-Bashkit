@@ -1,12 +1,21 @@
 [DEFAULT]
 banaction = nftables[type=multiport]
-banaction_allports = nftables[type=allports]
 backend = systemd
+usedns = no
 
 [sshd]
 enabled = true
-port = 22
+port = 2222
+protocol = tcp
 filter = sshd
-maxretry = 5
+mode = normal
+
+maxretry = 3
 findtime = 10m
-bantime = 1h
+bantime = 24h
+
+bantime.increment = true
+bantime.factor = 2
+bantime.maxtime = 30d
+
+ignoreip = 127.0.0.0/8 ::1
